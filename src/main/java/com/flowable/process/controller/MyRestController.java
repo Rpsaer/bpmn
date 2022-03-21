@@ -54,7 +54,7 @@ public class MyRestController {
     }
 
     public static void test(){
-        System.out.println("bpmn");
+        System.out.println("bpmna");
     }
 
 
