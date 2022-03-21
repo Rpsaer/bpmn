@@ -50,7 +50,13 @@ public class MyRestController {
         map.put("studentName", name);
         map.put("reqInfo",reqDetails);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(HEAD,map);
-        return "提交成功 : 该流程ID:" + processInstance.getId();
+        return "已经提交成功 : 该流程ID:" + processInstance.getId();
+    }
+
+    @RequestMapping(value = "getReqMap", method = RequestMethod.POST)
+    public void getMap(@RequestParam String name
+            , @RequestParam String reqDetails) {
+
     }
 
 
