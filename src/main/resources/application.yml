@@ -1,0 +1,14 @@
+spring:
+  thymeleaf:
+    cache: false # 关闭缓存,默认开启
+  datasource:
+    url: jdbc:mysql://localhost:3306/bpmn?useUnicode=true&characterEncoding=utf-8&serverTimezone=CTT
+    username: "root"
+    password: "0218"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:mapping/*.xml  #对应mapper映射xml文件所在路径
+  type-aliases-package: com.flowable.process.entity  #对应实体类路径
+flowable:
+  #关闭定时任务JOB
+  async-executor-activate: false
