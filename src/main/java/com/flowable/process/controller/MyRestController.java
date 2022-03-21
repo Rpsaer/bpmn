@@ -53,6 +53,6 @@ public class MyRestController {
         return "提交成功 : 流程ID: " + processInstance.getId();
     }
 
-
+public void test(){}
 
 }
