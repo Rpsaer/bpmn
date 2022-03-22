@@ -1,9 +1,6 @@
 package com.flowable.process.controller;
 
 
-import com.flowable.process.entity.MyEntity;
-import com.flowable.process.service.MyService;
-import liquibase.pro.packaged.A;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.*;
 import org.flowable.engine.runtime.Execution;
@@ -11,13 +8,11 @@ import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.ProcessDiagramGenerator;
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +25,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("flowable")
 public class MyRestController {
-
-    @Autowired
-    private MyService myService;
 
     @Autowired
     private RuntimeService runtimeService;
@@ -53,7 +45,7 @@ public class MyRestController {
 
     /**
      * @title
-     * @description 添加一个初始请求
+     * @description 添加一个初始请求  入参: {请求人 ,请求内容}
      * @author jiangyongtao
      * @updateTime 2022/3/22 15:12
      */
@@ -63,25 +55,37 @@ public class MyRestController {
         map.put("studentName", name);
         map.put("reqInfo", reqDetails);
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(HEAD, map);
-        return "已经提交成功 : 该流程ID:" + processInstance.getId();
-    }
-
-    @RequestMapping(value = "dealReq", method = RequestMethod.POST)
-    public String dealPeopleReq( String taskId) {
-        Task task  = taskService.createTaskQuery().taskId(taskId).singleResult();
-        if (task == null){
-            return "流程已审批完毕或不存在";
-        }
-        Map<String,Object> map = new HashMap<>();
-//        boolean ap = approved.equals("1")?true:false;
-        map.put("approved",true);
-        taskService.complete(taskId,map);
-        return "审批是否通过: ";
+        return "已经提交成功 : 该流程ID: " + processInstance.getId();
     }
 
     /**
+     * @Description 处理请求 入参:{任务Id,审批结果}
+     * @Author jiangyongtao
+     * @Date 2022/3/22 23:20
+     */
+    @RequestMapping(value = "dealReq", method = RequestMethod.POST)
+    public String dealPeopleReq(String taskId, String approved) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task == null) {
+            return "流程已审批完毕或不存在";
+        }
+        Map<String, Object> map = new HashMap<>();
+        boolean aprRes = approved.equals("通过") ? true : false;
+        map.put("approved", aprRes);
+        taskService.complete(taskId, map);
+        return "审批结果: " + approved;
+    }
+
+    @RequestMapping(value = "getGroupTaskLists",method = RequestMethod.GET)
+    public Object getList(@RequestParam String groupName){
+        List<Task> task = taskService.createTaskQuery().taskCandidateGroup(groupName).list();
+        return task.toString();
+    }
+
+
+    /**
      * @title
-     * @description 显示当前流程进展
+     * @description 显示当前流程进展  流程图化   入参:{ 流程Id}
      * @author jiangyongtao
      * @updateTime 2022/3/22 15:13
      */

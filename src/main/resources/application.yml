@@ -2,7 +2,7 @@ spring:
   thymeleaf:
     cache: false # 关闭缓存,默认开启
   datasource:
-    url: jdbc:mysql://localhost:3306/bpmn?useUnicode=true&characterEncoding=utf-8&serverTimezone=CTT
+    url: jdbc:mysql://localhost:3306/agriculture_bpmn?useUnicode=true&characterEncoding=utf-8&serverTimezone=CTT&nullCatalogMeansCurrent=true
     username: "root"
     password: "0218"
     driver-class-name: com.mysql.cj.jdbc.Driver
