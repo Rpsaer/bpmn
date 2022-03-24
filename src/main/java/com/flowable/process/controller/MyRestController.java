@@ -76,6 +76,12 @@ public class MyRestController {
         return "审批结果: " + approved;
     }
 
+    /**
+     * @title
+     * @description  获取流程中某一群体节点任务
+     * @author jiangyongtao
+     * @updateTime 2022/3/24 13:18
+     */
     @RequestMapping(value = "getGroupTaskLists",method = RequestMethod.GET)
     public Object getList(@RequestParam String groupName){
         List<Task> task = taskService.createTaskQuery().taskCandidateGroup(groupName).list();
